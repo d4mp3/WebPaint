@@ -54,6 +54,17 @@ class WebPaint {
                 this.ctx.lineTo(mousePos.x, mousePos.y)
                 this.ctx.stroke();
             }
+            if (this.mode === "line") {
+                // each pixel clean canvas
+                this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
+                this.ctx2.beginPath();
+                // draw line from start postion...
+                this.ctx2.moveTo(this.startX, this.startY);
+                // ...to current cursor's position
+                this.ctx2.lineTo(mousePos.x, mousePos.y);
+                this.ctx2.closePath();
+                this.ctx2.stroke();
+            }
         }
     }
 
@@ -71,6 +82,13 @@ class WebPaint {
 
     mouseDisable(e) {
         this.canDraw = false;
+
+        if (this.mode === "line") {
+            // copy canvas2 to canvas1
+            this.ctx.drawImage(this.canvas2, 0, 0);
+            // clean second canvas
+            this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
+        }
     }
 
     setupControls() {
@@ -130,17 +148,23 @@ class WebPaint {
         this.ctx.lineJoin = "round";
         this.lineCap = "round";
         this.ctx.strokeStyle = this.colorElem.value;
+
+        // settings for second canvas (line mode)
+        this.ctx2.lineWidth = this.sizeElem.value;
+        this.ctx2.strokeStyle = this.colorElem.value;
     }
 
     changeSize(e) {
         // displayed value by input:range
         this.sizeElemVal.innerText = e.target.value;
         this.ctx.lineWidth = e.target.value;
+        this.ctx2.lineWidth = e.target.value;
     }
 
     changeColor(e) {
         const color = this.colorElem.value;
         this.ctx.strokeStyle = color;
+        this.ctx2.strokeStyle = color;
     }
 
     createCanvas() {
@@ -149,6 +173,12 @@ class WebPaint {
         this.canvas.height = this.canvasCnt.offsetHeight;
         this.canvasCnt.appendChild(this.canvas);
         this.ctx = this.canvas.getContext('2d');
+
+        this.canvas2 = document.createElement("canvas");
+        this.canvas2.width = this.canvasCnt.offsetWidth;
+        this.canvas2.height = this.canvasCnt.offsetHeight;
+        this.canvasCnt.appendChild(this.canvas2);
+        this.ctx2 = this.canvas2.getContext("2d");
     }
 
     enabeMode(mode) {
