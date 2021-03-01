@@ -23,7 +23,7 @@ This is my version of paint in browser. You can make draw by it.
 To open it just see its github pages.
 
 ## Features
-List of features ready and TODO's for future development.
+List of features ready and TODO's for future development
 * draw (pen mode)
 * draw line
 
