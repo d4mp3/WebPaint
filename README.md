@@ -2,7 +2,7 @@
 
 ## Table of contents
 * [General info](#general-info)
-* [Screenshots)(#screenshots)
+* [Screenshots](#screenshots)
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Features](#features)
@@ -12,7 +12,7 @@
 This is my version of paint in browser. You can make draw by it.
 
 ## Screenshots
-![Example screenshot](./images/screenshot.png)
+![Example screenshot](./images/ss.png)
 
 ## Technologies
 * Javascript
