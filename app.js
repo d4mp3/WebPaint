@@ -65,6 +65,14 @@ class WebPaint {
                 this.ctx2.closePath();
                 this.ctx2.stroke();
             }
+            if (this.mode === "rectangle") {
+                this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
+                this.ctx2.beginPath();
+                this.ctx2.moveTo(this.startX, this.startY);
+                this.ctx2.rect(this.startX, this.startY, mousePos.x - this.startX, mousePos.y - this.startY);
+                this.ctx2.closePath();
+                this.ctx2.stroke();
+            }
         }
     }
 
@@ -83,7 +91,7 @@ class WebPaint {
     mouseDisable(e) {
         this.canDraw = false;
 
-        if (this.mode === "line") {
+        if (this.mode === "line" || this.mode === "rectangle") {
             // copy canvas2 to canvas1
             this.ctx.drawImage(this.canvas2, 0, 0);
             // clean second canvas
