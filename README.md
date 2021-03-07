@@ -26,9 +26,9 @@ To open it just see its github pages.
 List of features ready and TODO's for future development
 * draw (pen mode)
 * draw line
+* draw rectangle
 
 To-do list:
-* draw rectangle
 * draw triangle
 * draw circle
 
