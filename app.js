@@ -73,7 +73,22 @@ class WebPaint {
                 this.ctx2.closePath();
                 this.ctx2.stroke();
             }
+            if (this.mode === "circle") {
+                this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
+                this.ctx2.beginPath();
+                this.ctx2.arc(this.startX, this.startY, this.circleRadius(e), 0, 2 * Math.PI, false);
+                this.ctx2.closePath();
+                this.ctx2.stroke();
+            }
         }
+    }
+
+    circleRadius(e) {
+        const mousePos = this.getMousePosition(e);
+        let radius = 0;
+        let SquareRadius = Math.pow((mousePos.x - this.startX), 2) + Math.pow((mousePos.y - this.startY), 2);
+        radius = Math.sqrt(SquareRadius);
+        return radius;
     }
 
     mouseEnable(e) {
@@ -91,7 +106,7 @@ class WebPaint {
     mouseDisable(e) {
         this.canDraw = false;
 
-        if (this.mode === "line" || this.mode === "rectangle") {
+        if (this.mode === "line" || this.mode === "rectangle" || this.mode === "circle") {
             // copy canvas2 to canvas1
             this.ctx.drawImage(this.canvas2, 0, 0);
             // clean second canvas
@@ -196,8 +211,13 @@ class WebPaint {
         }
     }
 
+    angleToRadian(angle) {
+        return Math.PI/180 * angle;
+    }
 
-
+    // circleDirect(e) {
+    //     if ()
+    // }
 }
 
 new WebPaint();
