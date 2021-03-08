@@ -102,6 +102,14 @@ html,body {
     background: url(images/rectangle.png) no-repeat;
     background-size: cover;
 }
+.webpaint-bar .button-mode[data-mode="circle"] {
+    background: url(images/circle.png) no-repeat;
+    background-size: cover;
+}
+.webpaint-bar .button-mode[data-mode="triangle"] {
+    background: url(images/triangle.png) no-repeat;
+    background-size: cover;
+}
 .webpaint-bar .button-mode:focus {
     outline: none;
 }
