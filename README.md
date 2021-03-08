@@ -27,10 +27,15 @@ List of features ready and TODO's for future development
 * draw (pen mode)
 * draw line
 * draw rectangle
+* draw circle
 
 To-do list:
 * draw triangle
-* draw circle
+* erase
+* save 
+* undo
+* redo
+* clear
 
 
 ## Status
