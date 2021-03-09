@@ -2,7 +2,7 @@ class WebPaint {
     constructor() {
         this.canvasBg = new Image();
         this.canvasBg.addEventListener('load', () => {
-            this.avaibleMode = ['pen', 'line', 'rectangle'];
+            this.avaibleMode = ['pen', 'line', 'rectangle', 'circle'];
 
             // container for canvas
             this.canvasCnt = document.querySelector('.webpaint-canvas-cnt');
@@ -11,7 +11,6 @@ class WebPaint {
 
             // check for possible of drawing
             this.canDraw = false;
-            this.mode = 'pen';
 
             // pinn elements of canvas
             this.setupControls();
@@ -19,6 +18,7 @@ class WebPaint {
 
             // set default values for canvas
             this.setupInitialCtx();
+
         });
         this.canvasBg.src = "images/paper-bg.jpg";
     }
@@ -125,13 +125,12 @@ class WebPaint {
         // color picker element
         this.colorElem = document.querySelector('.paint-color');
 
+        // clear button
+        this.clearButton = document.getElementById('clear');
+
         // action button
         this.btnsMode = [...document.querySelectorAll('.webpaint-buttons-cnt .button-mode')];
 
-        // activate draw mode
-        this.btnsMode.filter(function(el) {
-            return el.dataset.mode === "pen"
-        })[0].classList.add('active');
     }
 
     bindControls() {
@@ -143,6 +142,8 @@ class WebPaint {
         this.canvasCnt.addEventListener('mousemove', this.mouseMove.bind(this));
         this.canvasCnt.addEventListener('mouseup', this.mouseDisable.bind(this));
         this.canvasCnt.addEventListener('mousedown', this.mouseEnable.bind(this));
+
+        this.clearButton.addEventListener('click', this.clear.bind(this));
 
         // after click at change draw mode button
         // turn off .active class for brothers
@@ -215,9 +216,10 @@ class WebPaint {
         return Math.PI/180 * angle;
     }
 
-    // circleDirect(e) {
-    //     if ()
-    // }
+     clear() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.canvasBg.src = "images/paper-bg.jpg";
+    }
 }
 
 new WebPaint();
