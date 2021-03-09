@@ -28,14 +28,15 @@ List of features ready and TODO's for future development
 * draw line
 * draw rectangle
 * draw circle
+* clean
+* save
 
 To-do list:
 * draw triangle
 * erase
-* save 
 * undo
 * redo
-* clear
+
 
 
 ## Status
