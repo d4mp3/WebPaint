@@ -128,6 +128,9 @@ class WebPaint {
         // clear button
         this.clearButton = document.getElementById('clear');
 
+        // save button
+        this.saveButton = document.getElementById('save');
+
         // action button
         this.btnsMode = [...document.querySelectorAll('.webpaint-buttons-cnt .button-mode')];
 
@@ -144,6 +147,7 @@ class WebPaint {
         this.canvasCnt.addEventListener('mousedown', this.mouseEnable.bind(this));
 
         this.clearButton.addEventListener('click', this.clear.bind(this));
+        this.saveButton.addEventListener('click', this.save.bind(this));
 
         // after click at change draw mode button
         // turn off .active class for brothers
@@ -216,9 +220,18 @@ class WebPaint {
         return Math.PI/180 * angle;
     }
 
-     clear() {
+    clear() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.canvasBg.src = "images/paper-bg.jpg";
+    }
+
+    save() {
+        this.imageName = prompt('Enter image name');
+        let canvasDataURL = this.canvas.toDataURL();
+        this.a = document.createElement('a');
+        this.a.href = canvasDataURL;
+        this.a.download = this.imageName || 'drawing';
+        this.a.click();
     }
 }
 
