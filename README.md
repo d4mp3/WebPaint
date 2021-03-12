@@ -33,9 +33,15 @@ List of features ready and TODO's for future development
 
 To-do list:
 * draw triangle
+* draw arc
+* insert photo from webcam
 * erase
 * undo
 * redo
+* draw filled objects
+* eclipse
+* insert text
+* change cap
 
 
 
