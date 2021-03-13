@@ -2,7 +2,7 @@ class WebPaint {
     constructor() {
         this.canvasBg = new Image();
         this.canvasBg.addEventListener('load', () => {
-            this.avaibleMode = ['pen', 'line', 'rectangle', 'circle'];
+            this.avaibleMode = ['pen', 'line', 'rectangle', 'circle', 'triangle'];
 
             // container for canvas
             this.canvasCnt = document.querySelector('.webpaint-canvas-cnt');
@@ -80,6 +80,15 @@ class WebPaint {
                 this.ctx2.closePath();
                 this.ctx2.stroke();
             }
+            if (this.mode === "triangle") {
+                this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
+                this.ctx2.beginPath();
+                this.ctx2.moveTo(this.startX, this.startY);
+                this.ctx2.lineTo(mousePos.x, mousePos.y);
+                this.ctx2.lineTo(this.sideOfTriangle(e), mousePos.y);
+                this.ctx2.closePath();
+                this.ctx2.stroke();
+            }
         }
     }
 
@@ -89,6 +98,14 @@ class WebPaint {
         let SquareRadius = Math.pow((mousePos.x - this.startX), 2) + Math.pow((mousePos.y - this.startY), 2);
         radius = Math.sqrt(SquareRadius);
         return radius;
+    }
+
+    sideOfTriangle(e) {
+        const mousePos = this.getMousePosition(e);
+        let halfLength = mousePos.x - this.startX;      // 1/2 distance of lower edge of the triangle
+        let sideLenght = this.startX - halfLength;
+        return sideLenght;
+
     }
 
     mouseEnable(e) {
@@ -106,7 +123,7 @@ class WebPaint {
     mouseDisable(e) {
         this.canDraw = false;
 
-        if (this.mode === "line" || this.mode === "rectangle" || this.mode === "circle") {
+        if (this.mode === "line" || this.mode === "rectangle" || this.mode === "circle" || this.mode === "triangle") {
             // copy canvas2 to canvas1
             this.ctx.drawImage(this.canvas2, 0, 0);
             // clean second canvas
