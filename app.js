@@ -244,11 +244,16 @@ class WebPaint {
 
     save() {
         this.imageName = prompt('Enter image name');
-        let canvasDataURL = this.canvas.toDataURL();
-        this.a = document.createElement('a');
-        this.a.href = canvasDataURL;
-        this.a.download = this.imageName || 'drawing';
-        this.a.click();
+        if (this.imageName === null) {
+            return;     // break out of the function if user clicked cancel
+            }
+            else {
+                let canvasDataURL = this.canvas.toDataURL();
+                this.a = document.createElement('a');
+                this.a.href = canvasDataURL;
+                this.a.download = this.imageName || 'drawing';
+                this.a.click();
+            }
     }
 }
 
