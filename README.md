@@ -28,11 +28,13 @@ List of features ready and TODO's for future development
 * draw line
 * draw rectangle
 * draw circle
+* draw triangle
 * clean
 * save
 
+
 To-do list:
-* draw triangle
+
 * draw arc
 * insert photo from webcam
 * erase
