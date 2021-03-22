@@ -49,45 +49,55 @@ class WebPaint {
     mouseMove(e) {
         if (this.canDraw) {
             const mousePos = this.getMousePosition(e);
+            switch (this.mode) {
+                case "pen": {
+                    this.ctx.lineTo(mousePos.x, mousePos.y);
+                    this.ctx.stroke();
+                    break;
+                }
 
-            if (this.mode === "pen") {
-                this.ctx.lineTo(mousePos.x, mousePos.y)
-                this.ctx.stroke();
-            }
-            if (this.mode === "line") {
-                // each pixel clean canvas
-                this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
-                this.ctx2.beginPath();
-                // draw line from start postion...
-                this.ctx2.moveTo(this.startX, this.startY);
-                // ...to current cursor's position
-                this.ctx2.lineTo(mousePos.x, mousePos.y);
-                this.ctx2.closePath();
-                this.ctx2.stroke();
-            }
-            if (this.mode === "rectangle") {
-                this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
-                this.ctx2.beginPath();
-                this.ctx2.moveTo(this.startX, this.startY);
-                this.ctx2.rect(this.startX, this.startY, mousePos.x - this.startX, mousePos.y - this.startY);
-                this.ctx2.closePath();
-                this.ctx2.stroke();
-            }
-            if (this.mode === "circle") {
-                this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
-                this.ctx2.beginPath();
-                this.ctx2.arc(this.startX, this.startY, this.circleRadius(e), 0, 2 * Math.PI, false);
-                this.ctx2.closePath();
-                this.ctx2.stroke();
-            }
-            if (this.mode === "triangle") {
-                this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
-                this.ctx2.beginPath();
-                this.ctx2.moveTo(this.startX, this.startY);
-                this.ctx2.lineTo(mousePos.x, mousePos.y);
-                this.ctx2.lineTo(this.sideOfTriangle(e), mousePos.y);
-                this.ctx2.closePath();
-                this.ctx2.stroke();
+                case "line": {
+                    // each pixel clean canvas
+                    this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
+                    this.ctx2.beginPath();
+                    // draw line from start postion...
+                    this.ctx2.moveTo(this.startX, this.startY);
+                    // ...to current cursor's position
+                    this.ctx2.lineTo(mousePos.x, mousePos.y);
+                    this.ctx2.closePath();
+                    this.ctx2.stroke();
+                    break;
+                }
+
+                case "rectangle": {
+                    this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
+                    this.ctx2.beginPath();
+                    this.ctx2.moveTo(this.startX, this.startY);
+                    this.ctx2.rect(this.startX, this.startY, mousePos.x - this.startX, mousePos.y - this.startY);
+                    this.ctx2.closePath();
+                    this.ctx2.stroke();
+                    break;
+                }
+
+                case "circle": {
+                    this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
+                    this.ctx2.beginPath();
+                    this.ctx2.arc(this.startX, this.startY, this.circleRadius(e), 0, 2 * Math.PI, false);
+                    this.ctx2.closePath();
+                    this.ctx2.stroke();
+                    break;
+                }
+
+                case "triangle": {
+                    this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
+                    this.ctx2.beginPath();
+                    this.ctx2.moveTo(this.startX, this.startY);
+                    this.ctx2.lineTo(mousePos.x, mousePos.y);
+                    this.ctx2.lineTo(this.sideOfTriangle(e), mousePos.y);
+                    this.ctx2.closePath();
+                    this.ctx2.stroke();
+                    break;
+                }
             }
         }
     }
