@@ -44,6 +44,7 @@ To-do list:
 * insert text
 * change cap
 * magic pen
+* background generator
 
 ## Status
 Project is: _in progres_
