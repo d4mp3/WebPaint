@@ -32,6 +32,7 @@ List of features ready and TODO's for future development
 * clean
 * save
 * eraser
+* draw filled objects
 
 To-do list:
 
@@ -39,7 +40,6 @@ To-do list:
 * insert photo from webcam
 * undo
 * redo
-* draw filled objects
 * eclipse
 * insert text
 * change cap
