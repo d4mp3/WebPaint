@@ -43,6 +43,7 @@ To-do list:
 * eclipse
 * insert text
 * change cap
+* magic pen
 
 ## Status
 Project is: _in progres_
