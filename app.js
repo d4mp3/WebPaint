@@ -241,6 +241,8 @@ class WebPaint {
         const color = this.colorElem.value;
         this.ctx2.strokeStyle = color;
         this.ctx3.strokeStyle = color;
+        this.ctx2.fillStyle = color;
+        this.ctx3.fillStyle = color;
     }
 
     createCanvas() {
