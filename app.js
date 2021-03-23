@@ -2,7 +2,7 @@ class WebPaint {
     constructor() {
         this.canvasBg = new Image();
         this.canvasBg.addEventListener('load', () => {
-            this.avaibleMode = ['pen', 'line', 'rectangle', 'circle', 'triangle'];
+            this.avaibleMode = ['eraser', 'pen', 'line', 'rectangle', 'circle', 'triangle'];
 
             // container for canvas
             this.canvasCnt = document.querySelector('.webpaint-canvas-cnt');
@@ -11,6 +11,7 @@ class WebPaint {
 
             // check for possible of drawing
             this.canDraw = false;
+            this.bErasing = false;
 
             // pinn elements of canvas
             this.setupControls();
@@ -18,7 +19,6 @@ class WebPaint {
 
             // set default values for canvas
             this.setupInitialCtx();
-
         });
         this.canvasBg.src = "images/paper-bg.jpg";
     }
@@ -48,54 +48,70 @@ class WebPaint {
 
     mouseMove(e) {
         if (this.canDraw) {
+            if (this.bErasing == true) {
+                this.ctx2.globalCompositeOperation = "destination-out";
+            } else {
+              this.ctx2.globalCompositeOperation = "source-over";
+            }
             const mousePos = this.getMousePosition(e);
             switch (this.mode) {
+                case "eraser" : {
+                    this.erase();
+                    this.ctx2.lineTo(mousePos.x, mousePos.y);
+                    this.ctx2.stroke();
+                    break;
+                }
                 case "pen": {
-                    this.ctx.lineTo(mousePos.x, mousePos.y);
-                    this.ctx.stroke();
+                    this.stopErase();
+                    this.ctx2.lineTo(mousePos.x, mousePos.y);
+                    this.ctx2.stroke();
                     break;
                 }
 
                 case "line": {
+                    this.stopErase();
                     // each pixel clean canvas
-                    this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
-                    this.ctx2.beginPath();
+                    this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
+                    this.ctx3.beginPath();
                     // draw line from start postion...
-                    this.ctx2.moveTo(this.startX, this.startY);
+                    this.ctx3.moveTo(this.startX, this.startY);
                     // ...to current cursor's position
-                    this.ctx2.lineTo(mousePos.x, mousePos.y);
-                    this.ctx2.closePath();
-                    this.ctx2.stroke();
+                    this.ctx3.lineTo(mousePos.x, mousePos.y);
+                    this.ctx3.closePath();
+                    this.ctx3.stroke();
                     break;
                 }
 
                 case "rectangle": {
-                    this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
-                    this.ctx2.beginPath();
-                    this.ctx2.moveTo(this.startX, this.startY);
-                    this.ctx2.rect(this.startX, this.startY, mousePos.x - this.startX, mousePos.y - this.startY);
-                    this.ctx2.closePath();
-                    this.ctx2.stroke();
+                    this.stopErase();
+                    this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
+                    this.ctx3.beginPath();
+                    this.ctx3.moveTo(this.startX, this.startY);
+                    this.ctx3.rect(this.startX, this.startY, mousePos.x - this.startX, mousePos.y - this.startY);
+                    this.ctx3.closePath();
+                    this.ctx3.stroke();
                     break;
                 }
 
                 case "circle": {
-                    this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
-                    this.ctx2.beginPath();
-                    this.ctx2.arc(this.startX, this.startY, this.circleRadius(e), 0, 2 * Math.PI, false);
-                    this.ctx2.closePath();
-                    this.ctx2.stroke();
+                    this.stopErase();
+                    this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
+                    this.ctx3.beginPath();
+                    this.ctx3.arc(this.startX, this.startY, this.circleRadius(e), 0, 2 * Math.PI, false);
+                    this.ctx3.closePath();
+                    this.ctx3.stroke();
                     break;
                 }
 
                 case "triangle": {
-                    this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
-                    this.ctx2.beginPath();
-                    this.ctx2.moveTo(this.startX, this.startY);
-                    this.ctx2.lineTo(mousePos.x, mousePos.y);
-                    this.ctx2.lineTo(this.sideOfTriangle(e), mousePos.y);
-                    this.ctx2.closePath();
-                    this.ctx2.stroke();
+                    this.stopErase();
+                    this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
+                    this.ctx3.beginPath();
+                    this.ctx3.moveTo(this.startX, this.startY);
+                    this.ctx3.lineTo(mousePos.x, mousePos.y);
+                    this.ctx3.lineTo(this.sideOfTriangle(e), mousePos.y);
+                    this.ctx3.closePath();
+                    this.ctx3.stroke();
                     break;
                 }
             }
@@ -115,29 +131,29 @@ class WebPaint {
         let halfLength = mousePos.x - this.startX;      // 1/2 distance of lower edge of the triangle
         let sideLenght = this.startX - halfLength;
         return sideLenght;
-
     }
 
     mouseEnable(e) {
         this.canDraw = true;
-
         const mousePos = this.getMousePosition(e);
 
         this.startX = mousePos.x;
         this.startY = mousePos.y;
+        this.ctx2.beginPath();
+        this.ctx2.moveTo(this.startX, this.startY);
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.startX, this.startY);
+
     }
 
     mouseDisable(e) {
         this.canDraw = false;
+        this.bErasing = false;
 
         if (this.mode === "line" || this.mode === "rectangle" || this.mode === "circle" || this.mode === "triangle") {
-            // copy canvas2 to canvas1
-            this.ctx.drawImage(this.canvas2, 0, 0);
-            // clean second canvas
-            this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
+            // copy canvas3 to canvas2
+            this.ctx2.drawImage(this.canvas3, 0, 0);
+            // clean third canvas
+            this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
         }
     }
 
@@ -199,41 +215,49 @@ class WebPaint {
         this.ctx.drawImage(this.canvasBg, 0, 0);
 
         //  default settings of pen
-        this.ctx.lineWidth = this.sizeElem.value;
-        this.ctx.lineJoin = "round";
-        this.lineCap = "round";
-        this.ctx.strokeStyle = this.colorElem.value;
-
-        // settings for second canvas (line mode)
         this.ctx2.lineWidth = this.sizeElem.value;
+        this.ctx2.lineJoin = "round";
+        this.ctx2.lineCap = "round";
         this.ctx2.strokeStyle = this.colorElem.value;
+
+        // settings for third canvas (for example for line mode)
+        this.ctx3.lineWidth = this.sizeElem.value;
+        this.ctx3.strokeStyle = this.colorElem.value;
     }
 
     changeSize(e) {
         // displayed value by input:range
         this.sizeElemVal.innerText = e.target.value;
-        this.ctx.lineWidth = e.target.value;
+        // this.ctx.lineWidth = e.target.value;
         this.ctx2.lineWidth = e.target.value;
+        this.ctx3.lineWidth = e.target.value;
     }
 
     changeColor(e) {
         const color = this.colorElem.value;
-        this.ctx.strokeStyle = color;
         this.ctx2.strokeStyle = color;
+        this.ctx3.strokeStyle = color;
     }
 
     createCanvas() {
+        // frst ctx is for constant not modifiable background
         this.canvas = document.createElement('canvas');
         this.canvas.width = this.canvasCnt.offsetWidth;
         this.canvas.height = this.canvasCnt.offsetHeight;
         this.canvasCnt.appendChild(this.canvas);
         this.ctx = this.canvas.getContext('2d');
-
+        // ctx2 is main workspace for drawings
         this.canvas2 = document.createElement("canvas");
         this.canvas2.width = this.canvasCnt.offsetWidth;
         this.canvas2.height = this.canvasCnt.offsetHeight;
         this.canvasCnt.appendChild(this.canvas2);
         this.ctx2 = this.canvas2.getContext("2d");
+        // ctx3 is for draw figure purpose
+        this.canvas3 = document.createElement("canvas");
+        this.canvas3.width = this.canvasCnt.offsetWidth;
+        this.canvas3.height = this.canvasCnt.offsetHeight;
+        this.canvasCnt.appendChild(this.canvas3);
+        this.ctx3 = this.canvas3.getContext("2d");
     }
 
     enabeMode(mode) {
@@ -248,8 +272,7 @@ class WebPaint {
     }
 
     clear() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.canvasBg.src = "images/paper-bg.jpg";
+        this.ctx2.clearRect(0, 0, this.canvas2.width, this.canvas2.height);
     }
 
     save() {
@@ -264,6 +287,14 @@ class WebPaint {
                 this.a.download = this.imageName || 'drawing';
                 this.a.click();
             }
+    }
+
+    erase() {
+        this.bErasing = true;
+    }
+
+    stopErase() {
+        this.bErasing = false;
     }
 }
 
