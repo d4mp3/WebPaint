@@ -19,7 +19,7 @@ class WebPaint {
 
             // set default values for canvas
             this.setupInitialCtx();
-        });
+    });
         this.canvasBg.src = "images/paper-bg.jpg";
     }
 
@@ -89,7 +89,7 @@ class WebPaint {
                     this.ctx3.moveTo(this.startX, this.startY);
                     this.ctx3.rect(this.startX, this.startY, mousePos.x - this.startX, mousePos.y - this.startY);
                     this.ctx3.closePath();
-                    this.ctx3.stroke();
+                    this.typeDraw();
                     break;
                 }
 
@@ -99,7 +99,7 @@ class WebPaint {
                     this.ctx3.beginPath();
                     this.ctx3.arc(this.startX, this.startY, this.circleRadius(e), 0, 2 * Math.PI, false);
                     this.ctx3.closePath();
-                    this.ctx3.stroke();
+                    this.typeDraw();
                     break;
                 }
 
@@ -111,7 +111,7 @@ class WebPaint {
                     this.ctx3.lineTo(mousePos.x, mousePos.y);
                     this.ctx3.lineTo(this.sideOfTriangle(e), mousePos.y);
                     this.ctx3.closePath();
-                    this.ctx3.stroke();
+                    this.typeDraw();
                     break;
                 }
             }
@@ -174,6 +174,9 @@ class WebPaint {
         // save button
         this.saveButton = document.getElementById('save');
 
+        //fill button
+        this.fillButon = document.getElementById('fill');
+
         // action button
         this.btnsMode = [...document.querySelectorAll('.webpaint-buttons-cnt .button-mode')];
 
@@ -191,6 +194,7 @@ class WebPaint {
 
         this.clearButton.addEventListener('click', this.clear.bind(this));
         this.saveButton.addEventListener('click', this.save.bind(this));
+        this.fillButon.addEventListener('click', this.fill.bind(this));
 
         // after click at change draw mode button
         // turn off .active class for brothers
@@ -295,6 +299,25 @@ class WebPaint {
 
     stopErase() {
         this.bErasing = false;
+    }
+
+    fill() {
+        if(this.fillButon.classList.contains('active')) {
+            this.fillButon.classList.remove('active');
+        } else {
+            this.fillButon.classList.add('active');
+        }
+    }
+
+    typeDraw() {
+        let drawMthd = 0;     //variable for kind of sketching (fill or stroke)
+        if(this.fillButon.classList.contains('active')) {
+            drawMthd = this.ctx3.fill();
+            return drawMthd;
+        } else {
+            drawMthd = this.ctx3.stroke();
+            return drawMthd;
+        }
     }
 }
 
