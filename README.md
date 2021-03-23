@@ -31,21 +31,18 @@ List of features ready and TODO's for future development
 * draw triangle
 * clean
 * save
-
+* eraser
 
 To-do list:
 
 * draw arc
 * insert photo from webcam
-* erase
 * undo
 * redo
 * draw filled objects
 * eclipse
 * insert text
 * change cap
-
-
 
 ## Status
 Project is: _in progres_
