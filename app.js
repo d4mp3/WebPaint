@@ -48,11 +48,6 @@ class WebPaint {
 
     mouseMove(e) {
         if (this.canDraw) {
-            if (this.bErasing == true) {
-                this.ctx2.globalCompositeOperation = "destination-out";
-            } else {
-              this.ctx2.globalCompositeOperation = "source-over";
-            }
             const mousePos = this.getMousePosition(e);
             switch (this.mode) {
                 case "eraser" : {
@@ -114,6 +109,12 @@ class WebPaint {
                     this.typeDraw();
                     break;
                 }
+            }
+            
+            if (this.bErasing == true) {
+                this.ctx2.globalCompositeOperation = "destination-out";
+            } else {
+              this.ctx2.globalCompositeOperation = "source-over";
             }
         }
     }
