@@ -19,6 +19,12 @@ class WebPaint {
 
             // set default values for canvas
             this.setupInitialCtx();
+
+            // container for undo/redo purposes
+            this.commands = [];
+            this.pathsry = [];
+            this.mouse = {x: 0, y: 0};
+            this.previous = {x: 0, y: 0};
     });
         this.canvasBg.src = "images/paper-bg.jpg";
     }
@@ -46,13 +52,83 @@ class WebPaint {
         };
     }
 
+    drawPaths() {
+        // delete everything
+        this.ctx2.clearRect(0,0,this.canvas2.width,this.canvas2.height);
+        // draw all the paths in the paths array
+        this.pathsry.forEach(path=>{
+        this.ctx2.beginPath();
+        this.ctx2.moveTo(path[0].x, path[0].y);
+        for(let i = 1; i < path.length; i++){
+            switch (this.mode) {
+                case "eraser" : {
+                    this.erase();
+                    this.ctx2.lineTo(path[i].x, path[i].y);
+                    this.ctx2.stroke();
+                    break;
+                }
+                case "pen": {
+                    this.stopErase();
+                    this.ctx2.lineTo(path[i].x, path[i].y);
+                    this.ctx2.stroke();
+                    break;
+                }
+
+                case "line": {
+                    this.stopErase();
+                    // each pixel clean canvas
+                    this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
+                    this.ctx3.beginPath();
+                    // // draw line from start postion...
+                    this.ctx3.moveTo(path[0].x, path[0].y);
+                    // ...to current cursor's position
+                    this.ctx3.lineTo(path[i].x, path[i].y);
+                    this.ctx3.closePath();
+                    this.ctx3.stroke();
+                    break;
+                }
+
+                case "rectangle": {
+                    this.stopErase();
+                    this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
+                    this.ctx3.beginPath();
+                    this.ctx3.moveTo(this.startX, this.startY);
+                    this.ctx3.rect(this.startX, this.startY, path[i].x - this.startX, path[i].y - this.startY);
+                    this.ctx3.closePath();
+                    this.typeDraw();
+                    break;
+                }
+
+                case "circle": {
+                    this.stopErase();
+                    this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
+                    this.ctx3.beginPath();
+                    this.ctx3.arc(this.startX, this.startY, this.circleRadius(e), 0, 2 * Math.PI, false);
+                    this.ctx3.closePath();
+                    this.typeDraw();
+                    break;
+                }
+
+                case "triangle": {
+                    this.stopErase();
+                    this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
+                    this.ctx3.beginPath();
+                    this.ctx3.moveTo(this.startX, this.startY);
+                    this.ctx3.lineTo(mousePos.x, mousePos.y);
+                    this.ctx3.lineTo(this.sideOfTriangle(e), mousePos.y);
+                    this.ctx3.closePath();
+                    this.typeDraw();
+                    break;
+                }
+            // this.ctx2.lineTo(path[i].x,path[i].y);
+            }
+        }
+      })
+    }
+
+
     mouseMove(e) {
         if (this.canDraw) {
-            if (this.bErasing == true) {
-                this.ctx2.globalCompositeOperation = "destination-out";
-            } else {
-              this.ctx2.globalCompositeOperation = "source-over";
-            }
             const mousePos = this.getMousePosition(e);
             switch (this.mode) {
                 case "eraser" : {
@@ -115,7 +191,55 @@ class WebPaint {
                     break;
                 }
             }
+            if (this.bErasing == true) {
+                this.ctx2.globalCompositeOperation = "destination-out";
+            } else {
+              this.ctx2.globalCompositeOperation = "source-over";
+            }
+            this.previous = {x:mousePos.x, y:mousePos.y};
+            this.commands.push({
+                x:mousePos.x,
+                y:mousePos.y,
+                mode: this.mode,
+            });
         }
+    }
+
+    mouseEnable(e) {
+        this.canDraw = true;
+        this.previous = {x: this.mouse.x, y: this.mouse.y};
+        const mousePos = this.getMousePosition(e);
+        this.mouse = mousePos;
+
+        this.startX = mousePos.x;
+        this.startY = mousePos.y;
+        this.commands.push({
+            x: this.startX,
+            y:  this.startY
+         })
+
+        this.ctx2.beginPath();
+        this.ctx2.moveTo(this.startX, this.startY);
+
+
+        // previous= {x: mousePos.x, y:mousePos.y}
+        // points = [];
+        // points.push({x:mousePos.x, y:mousePos.y});
+    }
+
+    mouseDisable(e) {
+        this.canDraw = false;
+        this.bErasing = false;
+
+        if (this.mode === "line" || this.mode === "rectangle" || this.mode === "circle" || this.mode === "triangle") {
+            // copy canvas3 to canvas2
+            this.ctx2.drawImage(this.canvas3, 0, 0);
+            // clean third canvas
+            this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
+        }
+
+        this.pathsry.push(this.commands);
+        this.commands = [];
     }
 
     circleRadius(e) {
@@ -131,30 +255,6 @@ class WebPaint {
         let halfLength = mousePos.x - this.startX;      // 1/2 distance of lower edge of the triangle
         let sideLenght = this.startX - halfLength;
         return sideLenght;
-    }
-
-    mouseEnable(e) {
-        this.canDraw = true;
-        const mousePos = this.getMousePosition(e);
-
-        this.startX = mousePos.x;
-        this.startY = mousePos.y;
-        this.ctx2.beginPath();
-        this.ctx2.moveTo(this.startX, this.startY);
-
-
-    }
-
-    mouseDisable(e) {
-        this.canDraw = false;
-        this.bErasing = false;
-
-        if (this.mode === "line" || this.mode === "rectangle" || this.mode === "circle" || this.mode === "triangle") {
-            // copy canvas3 to canvas2
-            this.ctx2.drawImage(this.canvas3, 0, 0);
-            // clean third canvas
-            this.ctx3.clearRect(0, 0, this.canvas3.width, this.canvas3.height);
-        }
     }
 
     setupControls() {
@@ -177,6 +277,9 @@ class WebPaint {
         //fill button
         this.fillButon = document.getElementById('fill');
 
+         //undo button
+         this.undoButon = document.getElementById('undo');
+
         // action button
         this.btnsMode = [...document.querySelectorAll('.webpaint-buttons-cnt .button-mode')];
 
@@ -195,6 +298,7 @@ class WebPaint {
         this.clearButton.addEventListener('click', this.clear.bind(this));
         this.saveButton.addEventListener('click', this.save.bind(this));
         this.fillButon.addEventListener('click', this.fill.bind(this));
+        this.undoButon.addEventListener('click', this.undo.bind(this));
 
         // after click at change draw mode button
         // turn off .active class for brothers
@@ -312,7 +416,9 @@ class WebPaint {
     }
 
     typeDraw() {
-        let drawMthd = 0;     //variable for kind of sketching (fill or stroke)
+        //variable for kind of sketching (fill or stroke)
+        let drawMthd = 0;
+
         if(this.fillButon.classList.contains('active')) {
             drawMthd = this.ctx3.fill();
             return drawMthd;
@@ -321,7 +427,17 @@ class WebPaint {
             return drawMthd;
         }
     }
+
+    undo() {
+        // if(this.pathsry.length < 2) {
+        //     this.pathsry = [];
+        // }
+        console.log(this.pathsry);
+        // remove the last path from the paths array
+        this.pathsry.pop();
+        // draw all the paths in the paths array
+        this.drawPaths();
+     }
 }
 
 new WebPaint();
-

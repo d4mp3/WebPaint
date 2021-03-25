@@ -132,6 +132,10 @@ html,body {
     background: url(images/clean.png) no-repeat;
     background-size: cover;
 }
+#undo {
+    background: url(images/undo.png) no-repeat;
+    background-size: cover;
+}
 #save {
     background: url(images/save.png) no-repeat;
     background-size: cover;
