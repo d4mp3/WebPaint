@@ -1,0 +1,27 @@
+body {
+	margin: 0;
+	background: url("https://images.unsplash.com/32/Mc8kW4x9Q3aRR3RkP5Im_IMG_4417.jpg?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1770&q=80");
+}
+
+#canvasCnt {
+	width: 100vw;
+	height: 100vh;
+	position: relative;
+	background: transparent;
+}
+
+#canvasCnt canvas {
+	position: absolute;
+	left: 0;
+	top: 0;
+	cursor: none;
+}
+
+#mainCanvas {
+	z-index: 0;
+}
+
+#secondaryCanvas {
+	z-index: 1;
+	pointer-events: none;
+}
