@@ -1,8 +1,10 @@
+import emiter from "./signalEmiter";
+
 function createCanvas(id, parentElement) {
 	const canvas = document.createElement("canvas")
 	canvas.width = parentElement.offsetWidth;
 	canvas.height = parentElement.offsetHeight;
-	canvas.id = id
+	canvas.id = id;
 	return canvas;
 }
 
@@ -51,17 +53,20 @@ class Board {
 	
 	setColor(color) {
 		this.toolParams.color = color;
-		this.currentTool.onMouseMove(this.mouse.x, this.mouse.y, this.ctx1, this.ctx2, this.toolParams)
+		this.currentTool.onMouseMove(this.mouse.x, this.mouse.y, this.ctx1, this.ctx2, this.toolParams);
+		emiter.changeColor.emit(color);
 	}
 	
 	setSize(size) {
 		this.toolParams.size = size;
-		this.currentTool.onMouseMove(this.mouse.x, this.mouse.y, this.ctx, this.ctx2, this.toolParams)
+		this.currentTool.onMouseMove(this.mouse.x, this.mouse.y, this.ctx, this.ctx2, this.toolParams);
+		emiter.changeSize.emit(size);
 	}
 	
 	setTool(tool) {
 		this.currentTool = tool;
-		this.currentTool.onMouseMove(this.mouse.x, this.mouse.y, this.ctx1, this.ctx2, this.toolParams)
+		this.currentTool.onMouseMove(this.mouse.x, this.mouse.y, this.ctx1, this.ctx2, this.toolParams);
+		emiter.changeTool.emit(tool);
 	}
 }
 	
