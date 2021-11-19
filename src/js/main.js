@@ -10,7 +10,7 @@ class App {
 		this.test();
 		board.setTool(makeTool("brush"));
 		board.setColor("black");
-		board.setSize(7);
+		board.setSize(10);
 	}
 
 	test() {

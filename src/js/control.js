@@ -39,12 +39,12 @@ class Control {
    }
 
     decreaseWidth(size) {
-        size -= 5;
-        return Math.max(10, size);
+        size -= 2;
+        return Math.max(2, size);
     }
 
     increaseWidth(size) {
-        size += 5;
+        size += 2;
         return Math.min(60, size);
     }
 }
