@@ -3,7 +3,8 @@ export default {
 		{key : "1", tool: "brush"},
 		{key : "2", tool: "line"},
 		{key : "3", tool: "rectangle"},
-		{key : "4", tool: "circle"}
+		{key : "4", tool: "circle"},
+		{key : "5", tool: "triangle"}
 	],
 
 	colors: [

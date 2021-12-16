@@ -2,6 +2,7 @@ import Brush from "./tools/brush";
 import Line from "./tools/line";
 import Rectangle from "./tools/rectangle";
 import Circle from "./tools/circle";
+import Triangle from "./tools/Triangle";
 
 export default function(tool) {
     switch (tool) {
@@ -13,5 +14,7 @@ export default function(tool) {
             return new Rectangle();
          case "circle":
             return new Circle();
+        case "triangle":
+            return new Triangle();
     }
 }
