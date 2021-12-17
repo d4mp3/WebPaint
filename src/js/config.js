@@ -1,5 +1,6 @@
 export default {
 	tools: [
+		{key : "`", tool: "eraser"},
 		{key : "1", tool: "brush"},
 		{key : "2", tool: "line"},
 		{key : "3", tool: "rectangle"},

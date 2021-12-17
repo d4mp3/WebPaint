@@ -3,6 +3,7 @@ import Line from "./tools/line";
 import Rectangle from "./tools/rectangle";
 import Circle from "./tools/circle";
 import Triangle from "./tools/Triangle";
+import Eraser from "./tools/Eraser";
 
 export default function(tool) {
     switch (tool) {
@@ -16,5 +17,7 @@ export default function(tool) {
             return new Circle();
         case "triangle":
             return new Triangle();
+        case "eraser":
+            return new Eraser();
     }
 }
