@@ -5,6 +5,7 @@ import Circle from "./tools/circle";
 import Triangle from "./tools/Triangle";
 import Eraser from "./tools/Eraser";
 import Wiper from "./tools/wiper";
+import Saver from "./tools/saver";
 
 export default function(tool) {
     switch (tool) {
@@ -22,5 +23,7 @@ export default function(tool) {
             return new Eraser();
         case "wiper":
             return new Wiper();
+        case "saver":
+            return new Saver();
     }
 }

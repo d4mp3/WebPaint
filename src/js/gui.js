@@ -20,7 +20,9 @@ class Gui {
             "line": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 11H19V13H5z"/></svg>`,
             "rectangle": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20,3H4C3.448,3,3,3.447,3,4v16c0,0.553,0.448,1,1,1h16c0.553,0,1-0.447,1-1V4C21,3.447,20.553,3,20,3z M19,19H5V5h14V19z"/></svg>`,
             "circle": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2C6.486,2,2,6.486,2,12s4.486,10,10,10s10-4.486,10-10S17.514,2,12,2z M12,20c-4.411,0-8-3.589-8-8s3.589-8,8-8 s8,3.589,8,8S16.411,20,12,20z"/></svg>`,
-            "triangle": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19zm9-12.243L19.092 17H4.908L12 6.757z"></path></svg>`
+            "triangle": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19zm9-12.243L19.092 17H4.908L12 6.757z"></path></svg>`,
+            "saver": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M5 21h14a2 2 0 0 0 2-2V8a1 1 0 0 0-.29-.71l-4-4A1 1 0 0 0 16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2zm10-2H9v-5h6zM13 7h-2V5h2zM5 5h2v4h8V5h.59L19 8.41V19h-2v-5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v5H5z"></path></svg>`
+
         };
 
         this.cnt = document.createElement("div");
@@ -40,7 +42,8 @@ class Gui {
     }
 
     updateToolsList(toolName) {
-        if (toolName !== "wiper") {
+        if (toolName !== "wiper" &&
+            toolName !== "saver") {
             this.cnt.querySelectorAll(".gui-tools__element").forEach(el => {
                 el.classList.remove("is-active");
             });
@@ -59,7 +62,8 @@ class Gui {
         this.cnt.querySelectorAll(".gui-tools__element").forEach(el => {
             el.addEventListener("click", e => {
                 const tool = makeTool(el.dataset.tool);
-                if (el.dataset.tool !== "wiper") {
+                if (el.dataset.tool !== "wiper" &&
+                    el.dataset.tool !== "saver") {
                     board.setTool(tool);
                 }
             })

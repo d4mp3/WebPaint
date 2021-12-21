@@ -17,7 +17,8 @@ class Control {
         config.tools.forEach(el => {
             if (e.key === el.key) {
                 const tool = makeTool(el.tool);
-                if (e.key !== "Escape") {
+                if (e.key !== "Escape" &&
+                    e.key !== "F1") {
                     board.setTool(tool);
                 }
             }

@@ -7,6 +7,7 @@ export default {
 		{key : "4", tool: "circle"},
 		{key : "5", tool: "triangle"},
 		{key : "Escape", tool: "wiper"},
+		{key : "F1", tool: "saver"}
 	],
 
 	colors: [
