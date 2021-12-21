@@ -40,11 +40,14 @@ class Gui {
     }
 
     updateToolsList(toolName) {
-        this.cnt.querySelectorAll(".gui-tools__element").forEach(el => {
-            el.classList.remove("is-active");
-        });
+        if (toolName !== "wiper") {
+            this.cnt.querySelectorAll(".gui-tools__element").forEach(el => {
+                el.classList.remove("is-active");
+            });
 
-        this.cnt.querySelector(`.gui-tools__element[data-tool="${toolName}"]`).classList.add("is-active");
+            this.cnt.querySelector(`.gui-tools__element[data-tool="${toolName}"]`).classList.add("is-active");
+        }
+
     }
 
     updateColor(color) {
@@ -56,7 +59,9 @@ class Gui {
         this.cnt.querySelectorAll(".gui-tools__element").forEach(el => {
             el.addEventListener("click", e => {
                 const tool = makeTool(el.dataset.tool);
-                board.setTool(tool);
+                if (el.dataset.tool !== "wiper") {
+                    board.setTool(tool);
+                }
             })
         })
 
