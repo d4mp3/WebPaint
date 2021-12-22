@@ -17,13 +17,19 @@ export default class Triangle extends Tool {
 	drawFigure(x, y, ctx, toolProp) {
 		ctx.lineWidth = toolProp.size;
 		ctx.lineCap = "round";
-		ctx.strokeStyle = toolProp.color;
 		ctx.beginPath();
         ctx.moveTo(this._startX, this._startY);
         ctx.lineTo(x, y);
         ctx.lineTo(this.sideOfTriangle(x), y);
         ctx.closePath();
-        ctx.stroke();
+
+        if (toolProp.modifier == "control") {
+            ctx.fillStyle = toolProp.color;
+            ctx.fill();
+        } else {
+            ctx.strokeStyle = toolProp.color;
+            ctx.stroke();
+        }
 		ctx.restore();
 	}
 
@@ -42,7 +48,7 @@ export default class Triangle extends Tool {
         ctx.restore();
     }
 
-	onMouseMove(x, y, ctx1, ctx2, toolProp) {
+    onMouseMove(x, y, ctx1, ctx2, toolProp) {
         ctx2.clearRect(0, 0, ctx2.canvas.width, ctx2.canvas.height);
 
         if (!this._draw) {
@@ -50,7 +56,6 @@ export default class Triangle extends Tool {
         } else {
             this.drawFigure(x, y, ctx2, toolProp);
         }
-
     }
 
     onMouseUp(x, y, ctx1, ctx2, toolProp) {

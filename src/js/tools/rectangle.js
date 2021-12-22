@@ -12,9 +12,16 @@ export default class Rectangle extends Tool {
 	drawFigure(x, y, ctx, toolProp) {
 		ctx.lineWidth = toolProp.size;
 		ctx.lineCap = "round";
-		ctx.strokeStyle = toolProp.color;
 		ctx.beginPath();
-		ctx.strokeRect(this._startX, this._startY, x - this._startX, y - this._startY);
+
+        if (toolProp.modifier == "control") {
+            ctx.fillStyle = toolProp.color;
+            ctx.fillRect(this._startX, this._startY, x - this._startX, y - this._startY);
+        } else {
+            ctx.strokeStyle = toolProp.color;
+            ctx.strokeRect(this._startX, this._startY, x - this._startX, y - this._startY);
+        }
+
 		ctx.restore();
 	}
 
@@ -29,7 +36,7 @@ export default class Rectangle extends Tool {
         ctx.restore();
     }
 
-	onMouseMove(x, y, ctx1, ctx2, toolProp) {
+    onMouseMove(x, y, ctx1, ctx2, toolProp) {
         ctx2.clearRect(0, 0, ctx2.canvas.width, ctx2.canvas.height);
 
         if (!this._draw) {
@@ -37,15 +44,14 @@ export default class Rectangle extends Tool {
         } else {
             this.drawFigure(x, y, ctx2, toolProp);
         }
-
     }
 
     onMouseUp(x, y, ctx1, ctx2, toolProp) {
-        if (this._draw) {
-            this.drawFigure(x, y, ctx1, toolProp);
+            if (this._draw) {
+                this.drawFigure(x, y, ctx1, toolProp);
+            }
+            this._draw = false;
         }
-        this._draw = false;
-    }
 
     onMouseDown(x, y, ctx1, ctx2, toolProp) {
         if (!this._draw) {

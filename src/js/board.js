@@ -25,7 +25,9 @@ class Board {
         this.currentTool = null;
         this.toolParams = {
             color: "black",
-            size: 10
+            size: 8,
+            isCtrl: false,
+            modifier: null,
         }
 
         this.bindEvents();
@@ -71,6 +73,18 @@ class Board {
         this.currentTool.onMouseMove(this.mouse.x, this.mouse.y, this.ctx1, this.ctx2, this.toolParams);
 		emiter.changeTool.emit(tool);
     }
+
+    setModifier(modifier) {
+        this.toolParams.modifier = modifier;
+        this.currentTool.onMouseMove(this.mouse.x, this.mouse.y, this.ctx1, this.ctx2, this.toolParams);
+		emiter.changeModifier.emit(modifier);
+    }
+
+    // setCtrl(bool) {
+    //     this.toolParams.isCtrl = bool;
+    //     this.currentTool.onMouseMove(this.mouse.x, this.mouse.y, this.ctx1, this.ctx2, this.toolParams);
+	// 	emiter.changeCtrl.emit(bool);
+    // }
 }
 
 const board = new Board("#canvasCnt");

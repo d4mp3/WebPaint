@@ -9,12 +9,10 @@ export default class Circle extends Tool {
 		this._startY = 0;
 	}
 
-
 	drawFigure(x, y, ctx, toolProp) {
         ctx.save();
 		ctx.lineWidth = toolProp.size;
 		ctx.lineCap = "round";
-		ctx.strokeStyle = toolProp.color;
 		ctx.beginPath();
         const i = Math.min(this._startX, x);
         let r = Math.min(this._startY, y);
@@ -25,11 +23,19 @@ export default class Circle extends Tool {
         let l = (n - i) / 2;
         let d = (a - r) / 2;
         ctx.ellipse(h, c, l, d, 0, 0, 2 * Math.PI);
-        ctx.stroke();
-		ctx.restore();
+
+        if (toolProp.modifier == "control") {
+            ctx.fillStyle = toolProp.color;
+            ctx.fill();
+        } else {
+            ctx.strokeStyle = toolProp.color;
+            ctx.stroke();
+        }
+
+        ctx.restore();
 	}
 
-	 //draw pointer at cursor's place
+    //draw pointer at cursor's place
      drawPointer(x, y, ctx, toolProp) {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.save();
@@ -44,7 +50,7 @@ export default class Circle extends Tool {
         ctx.restore();
         }
 
-	onMouseMove(x, y, ctx1, ctx2, toolProp) {
+    onMouseMove(x, y, ctx1, ctx2, toolProp) {
         ctx2.clearRect(0, 0, ctx2.canvas.width, ctx2.canvas.height);
 
         if (!this._draw) {
@@ -52,7 +58,6 @@ export default class Circle extends Tool {
         } else {
             this.drawFigure(x, y, ctx2, toolProp);
         }
-
     }
 
     onMouseUp(x, y, ctx1, ctx2, toolProp) {

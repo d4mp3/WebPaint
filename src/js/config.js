@@ -10,6 +10,12 @@ export default {
 		{key : "F1", tool: "saver"}
 	],
 
+	modifiers: [
+		{key : "Control", modifier: "control"},
+		{key : "Shift", modifier: "shift"},
+		{key : "Alt", modifier: "alt"}
+	],
+
 	colors: [
 		{key : "r", color: "red"},
 		{key : "g", color: "green"},

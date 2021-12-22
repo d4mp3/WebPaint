@@ -7,9 +7,17 @@ class Control {
         this.keyUpTool = this.keyUpTool.bind(this);
         this.keyUpColor = this.keyUpColor.bind(this);
         this.wheelSize = this.wheelSize.bind(this);
+        this.keyUpTool = this.keyUpTool.bind(this);
+        // this.ctrlUp = this.ctrlUp.bind(this);
+        this.keyDownModifier = this.keyDownModifier.bind(this);
+        this.keyUpModifier = this.keyUpModifier.bind(this);
+
 
         document.addEventListener("keyup", this.keyUpTool);
         document.addEventListener("keyup", this.keyUpColor);
+        // document.addEventListener("keydown", this.ctrlUp);
+        document.addEventListener("keydown", this.keyDownModifier);
+        document.addEventListener("keyup", this.keyUpModifier);
         document.addEventListener("wheel", this.wheelSize);
     }
 
@@ -34,11 +42,35 @@ class Control {
         });
     }
 
+    keyDownModifier(e) {
+        config.modifiers.forEach(el => {
+            if (e.key === el.key) {
+                const modifier = el.modifier;
+                board.setModifier(modifier);
+            }
+        });
+    }
+
+    keyUpModifier(e) {
+        config.modifiers.forEach(el => {
+            if (e.key === el.key) {
+                const modifier = null;
+                board.setModifier(modifier);
+            }
+        });
+    }
+
     wheelSize(e) {
         let size = board.toolParams.size;
         if (e.deltaY > 0) size = this.decreaseWidth(size);
         if (e.deltaY < 0) size = this.increaseWidth(size);
         board.setSize(size);
+   }
+
+   ctrlUp(e) {
+       if (e.ctrlKey) {
+           return true;
+       }
    }
 
     decreaseWidth(size) {

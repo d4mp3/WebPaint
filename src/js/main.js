@@ -25,6 +25,14 @@ class App {
 		emiter.changeColor.on(color => {
 			console.log("Color changed for ", color);
 		})
+
+		emiter.changeModifier.on(modifier => {
+			console.log("Modifier changed for: ", modifier);
+		})
+
+		emiter.changeCtrl.on(bool => {
+			console.log("Ctrl: ", bool);
+		})
 	}
 }
 
