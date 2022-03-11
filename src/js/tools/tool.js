@@ -1,5 +1,5 @@
-import control from "../control";
-import board from "../board";
+// import control from "../control";
+// import board from "../board";
 export default class Tool {
 	constructor() {
 		this.name = "";

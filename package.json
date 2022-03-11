@@ -9,5 +9,9 @@
   "devDependencies": {
     "sass": "^1.43.4",
     "vite": "^2.6.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "lodash.remove": "^4.7.0"
   }
 }

@@ -1,4 +1,7 @@
 import Tool from "./tool";
+import board from "../board";
+
+
 
 export default class Brush extends Tool {
 	constructor() {
@@ -36,6 +39,7 @@ export default class Brush extends Tool {
             ctx1.moveTo(this._prevX , this._prevY);
             ctx1.lineTo(x, y);
             ctx1.stroke();
+
         }
 
         this._prevX = x;

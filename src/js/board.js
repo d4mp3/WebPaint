@@ -21,14 +21,19 @@ class Board {
         this.ctx1 = this.canvas1.getContext("2d");
         this.ctx2 = this.canvas2.getContext("2d");
 
-        this.mouse = { x: 0, y : 0 }
+        this.history = [];
+        this.trace = [];
+        this.pressedMouse = false;
+
+        this.mouse = { x: 0, y : 0 };
         this.currentTool = null;
         this.toolParams = {
             color: "black",
             size: 8,
+            cap: "round",
             isCtrl: false,
             modifier: null,
-        }
+        };
 
         this.bindEvents();
     }
@@ -39,20 +44,42 @@ class Board {
             this.mouse.y = e.pageY;
 
             if (this.currentTool) {
-                this.currentTool.onMouseMove(e.pageX, e.pageY, this.ctx1, this.ctx2, this.toolParams)
+                this.currentTool.onMouseMove(e.pageX, e.pageY, this.ctx1, this.ctx2, this.toolParams);
+                if (this.pressedMouse == true) {
+                    this.trace.push({
+                        x: e.pageX,
+                        y: e.pageY
+                    });
+                }
             }
         });
+
 
         this.canvas1.addEventListener("mousedown", e => {
             if (this.currentTool) {
-                this.currentTool.onMouseDown(e.offsetX, e.offsetY, this.ctx1, this.ctx2, this.toolParams)
+                this.currentTool.onMouseDown(e.offsetX, e.offsetY, this.ctx1, this.ctx2, this.toolParams);
+                this.trace.push({
+                    x: e.offsetX,
+                    y: e.offsetY
+                });
             }
+
+            this.pressedMouse = true;
         });
 
+        //push trace to history
         this.canvas1.addEventListener("mouseup", e => {
+            this.pressedMouse = false;
+            this.toolProps = structuredClone(this.toolParams);
+            this.history.push({
+                drawedPath: this.trace,
+                tool: this.currentTool,
+                toolProps: this.toolProps
+            });
             if (this.currentTool) {
-                this.currentTool.onMouseUp(e.offsetX, e.offsetY, this.ctx1, this.ctx2, this.toolParams)
+                this.currentTool.onMouseUp(e.offsetX, e.offsetY, this.ctx1, this.ctx2, this.toolParams);
             }
+            this.trace = [];
         });
     }
 

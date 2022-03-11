@@ -1,5 +1,7 @@
 export default {
 	tools: [
+		{key : "z", tool: "undo"},
+		{key : "y", tool: "redo"},
 		{key : "`", tool: "eraser"},
 		{key : "1", tool: "brush"},
 		{key : "2", tool: "line"},
